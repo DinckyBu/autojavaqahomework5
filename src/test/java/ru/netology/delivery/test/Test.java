@@ -1,7 +1,6 @@
 package ru.netology.delivery.test;
 
 import com.codeborne.selenide.Condition;
-import com.github.javafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 class DeliveryTest {
-    Faker faker = new Faker();
+
     @BeforeEach
     void setup() {
         open("http://localhost:9999");
@@ -40,10 +39,13 @@ class DeliveryTest {
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id=date] input").setValue(secondMeetingDate);
         $(byText("Запланировать")).click();
-        $(".notification__content").shouldHave(Condition.exactText("У вас уже запланирована встреча на другую дату. Перепланировать? "))
+//        $("[data-test-id='replan-notification] button").click();
+
+        $("[data-test-id='replan-notification'] .notification__content").shouldHave(Condition.text("У вас уже запланирована встреча на другую дату. Перепланировать?"))
                 .shouldBe(Condition.visible);
-        $("[data-test-id='replan-notification] button").click();
-        $("[data-test-id='succtss-notification] .notification__content")
+        $(".button").click();
+
+        $("[data-test-id='success-notification'] .notification__content")
                 .shouldHave(Condition.exactText("Встреча успешно запланирована на " + secondMeetingDate))
                 .shouldBe(Condition.visible);
 
